@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GameLib:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/GameLib_jar</output-path>
+    <root id="archive" name="GameLib.jar">
+      <element id="module-output" name="GameLib" />
+    </root>
+  </artifact>
+</component>
