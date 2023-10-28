@@ -1,2 +1,4 @@
-package de.fappidev.gamelib.gameobjects.utils;public class Shape {
+package de.fappidev.gamelib.gameobjects;
+
+class Shape {
 }

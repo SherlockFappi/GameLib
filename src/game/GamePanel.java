@@ -1,22 +1,53 @@
-package test;
+package game;
 
-import de.fappidev.gamelib.gameobjects.Player;
-import de.fappidev.gamelib.gameobjects.geometric.Square;
+import de.fappidev.gamelib.gameobjects.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
-    private final Square background = (Square) Main.objectList.getValue("Background");
-    private final Player player = (Player) Main.objectList.getValue("Player");
-
+    int[] renderComponents;
 
     @Override
     public void paintComponent(Graphics g) {
-        g.setColor(background.getColor());
-        g.fillRect((int) background.transform().x(), (int) background.transform().y(), (int) background.transform().getSize(), (int) background.transform().getSize());
+        for (int i = 0; i < Main.objectList.length(); i++) {
+            GameObject obj = Main.objectList.get(i);
+            renderComponents = obj.getRenderComponents();
+            g.setColor(obj.getColor());
+            switch (obj.getShape()) {
+                case "NONE" -> {
+                    continue;
+                }
 
-        g.setColor(player.getColor());
-        g.fillRect((int) player.transform().x(), (int) player.transform().y(), (int) player.transform().getSize(), (int) player.transform().getSize());
+                case "RECT" -> {
+                    g.fillRect(renderComponents[0], renderComponents[1], renderComponents[2], renderComponents[3]);
+                }
+
+                case "CIRCLE" -> {
+                    g.fillOval(renderComponents[0], renderComponents[1], renderComponents[2], renderComponents[3]);
+                }
+            }
+
+            for (int j = 0; j < obj.getObjectList().size(); j++) {
+                GameObject subOBJ = obj.getObjectList().get(j);
+                g.setColor(subOBJ.getColor());
+                renderComponents = subOBJ.getRenderComponents();
+
+                switch (subOBJ.getShape()) {
+                    case "NONE" -> {
+                        continue;
+                    }
+
+                    case "RECT" -> {
+                        g.fillRect(renderComponents[0], renderComponents[1], renderComponents[2], renderComponents[3]);
+                    }
+
+                    case "CIRCLE" -> {
+                        g.fillOval(renderComponents[0], renderComponents[1], renderComponents[2], renderComponents[3]);
+                    }
+                }
+            }
+
+        }
     }
 }

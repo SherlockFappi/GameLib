@@ -9,22 +9,28 @@ public class FrameRateController {
     private static int ups = 0;
     private static int frames = 0;
     private static int updates = 0;
+    static boolean isRunning = false;
 
-    Thread framerateThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(() -> {
-                fps = frames;
-                frames = 0;
-                ups = updates;
-                updates = 0;
-                System.out.println("FPS/UPS: " + getFps() + "/" + getUps());
-            }, 1, 1, TimeUnit.SECONDS);
-        }
-    });
-    public FrameRateController () {
-        framerateThread.start();
+    static ScheduledExecutorService executor;
+    static Runnable runnable = () -> {
+        fps = frames;
+        frames = 0;
+        ups = updates;
+        updates = 0;
+        System.out.println("FPS/UPS: " + getFps() + "/" + getUps());
+    };
+
+    public static void startFrameRateController () {
+        executor = Executors.newScheduledThreadPool(1);
+        isRunning = true;
+        frames = 0;
+        updates = 0;
+        executor.scheduleAtFixedRate(runnable, 1, 1, TimeUnit.SECONDS);
+    }
+
+    static void stopFrameRateController() {
+        isRunning = false;
+        executor.close();
     }
 
     static void addFps() {
@@ -35,11 +41,11 @@ public class FrameRateController {
         updates++;
     }
 
-    public int getFps() {
+    public static int getFps() {
         return fps;
     }
 
-    public int getUps() {
+    public static int getUps() {
         return ups;
     }
 }

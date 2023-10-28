@@ -1,6 +1,6 @@
 package de.fappidev.gamelib.controls;
 
-import test.Main;
+import game.Main;
 
 public class UpdateThread extends Thread implements Runnable {
     private static long targetTime;
@@ -27,5 +27,9 @@ public class UpdateThread extends Thread implements Runnable {
             }
             FrameRateController.addUps();
         }
+    }
+
+    public static long getTimePerUpdate() {
+        return targetTime;
     }
 }

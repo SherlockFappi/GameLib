@@ -1,6 +1,6 @@
 package de.fappidev.gamelib.controls;
 
-import test.Main;
+import game.Main;
 
 import java.awt.*;
 

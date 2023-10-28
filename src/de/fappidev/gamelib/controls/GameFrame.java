@@ -15,9 +15,9 @@ public class GameFrame extends JFrame {
     public static int WEST = 3;
     public static int CENTER = 4;
 
-    private Properties appProps;
+    private final Properties appProps;
 
-    public GameFrame (Dimension dimension, boolean fullScreen, KeyAdapter keyAdapter) {
+    public GameFrame (Dimension dimension, boolean fullScreen, KeyAdapter keyAdapter, int targetFps, int targetUps) {
         super();
         appProps = new Properties();
         try {
@@ -49,10 +49,24 @@ public class GameFrame extends JFrame {
         setLayout(new BorderLayout());
 
         setVisible(true);
+
+        UpdateThread updateThread = new UpdateThread(targetUps);
+        updateThread.start();
+        RenderThread renderThread = new RenderThread(targetFps);
+        renderThread.start();
     }
 
-    public FrameRateController addFrameRateController() {
-        return new FrameRateController();
+    public void printFrameRate(boolean b) {
+        if (b && !FrameRateController.isRunning) {
+            FrameRateController.startFrameRateController();
+        }
+        else if (!b && FrameRateController.isRunning) {
+            FrameRateController.stopFrameRateController();
+        }
+    }
+
+    public boolean getPrintFrameRate() {
+        return FrameRateController.isRunning;
     }
 
     public void addPanel(JPanel panel, int position) {
@@ -60,7 +74,7 @@ public class GameFrame extends JFrame {
             switch (position) {
                 case 0 -> {
                     add(panel, BorderLayout.NORTH);
-                    System.out.println("test");
+                    System.out.println("game");
                 }
                 case 1 -> add(panel, BorderLayout.EAST);
                 case 2 -> add(panel, BorderLayout.SOUTH);
